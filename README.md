@@ -86,4 +86,4 @@ Also the django web application in
 
 ## Feedback
 
-If you have any feedback, please reach out to us at m.pajmal@gmailaju07.com
+If you have any feedback, please reach out to us at m.pajmalaju07@gmail.com
