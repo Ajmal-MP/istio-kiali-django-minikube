@@ -1,0 +1,111 @@
+#service
+apiVersion: v1
+kind: Service
+metadata:
+  name: gaming-service
+spec:
+  selector:
+    service: gaming-service
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+---
+#virtual service
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: vs
+spec:
+  hosts:
+  - web.aj.com
+  gateways:
+  - istio-ingress-gateway
+  http:
+  - route:
+    - destination:
+        host: gaming-service.default.svc.cluster.local
+        port: 
+          number: 8000
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-ingress-gateway
+spec:
+  selector:
+    istio: ingressgateway # use the istio ingress gateway deployment
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+#3 diployment s
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaming-v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gaming-v1
+  template:
+    metadata:
+      labels:
+        app: gaming-v1
+        service: gaming-service
+        version: v1
+    spec:
+      containers:
+      - name: gaming-v1-container
+        image: ajmaldocker07/gaming_docker_image1
+        ports:
+        - containerPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaming-v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gaming-v2
+  template:
+    metadata:
+      labels:
+        app: gaming-v2
+        service: gaming-service
+        version: v2
+    spec:
+      containers:
+      - name: gaming-v2-container
+        image: ajmaldocker07/gaming_docker_image1
+        ports:
+        - containerPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaming-v3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gaming-v3
+  template:
+    metadata:
+      labels:
+        app: gaming-v3
+        service: gaming-service
+        version: v2
+    spec:
+      containers:
+      - name: gaming-v3-container
+        image: ajmaldocker07/gaming_docker_image1
+        ports:
+        - containerPort: 8000
