@@ -2,7 +2,6 @@ import os
 wdir=os.getcwd()
 
 def istio_installation():
-    os.system("curl -L https://istio.io/downloadIstio/ | ISTIO_VERSION=1.16.1 sh -")
     istio_dir = os.path.join(wdir,"istio-1.16.1")  
     os.chdir(istio_dir)
     bin_dir = os.path.join(istio_dir,"bin")
